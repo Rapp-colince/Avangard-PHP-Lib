@@ -220,12 +220,13 @@ trait Orders
         }
 
         if ($status == 200 && $resultObject['response_code'] == 0) {
-            return [
-//                'id' => $resultObject['id'],
-                'TICKET' => $resultObject['ticket'],
-//                'ok_code' => $resultObject['ok_code'],
-//                'failure_code' => $resultObject['failure_code']
-            ];
+            $fields = ['ticket', 'ok_code', 'failure_code', 'qr_png_base64', 'qrUrl'];
+            foreach ($fields as $field) {
+                if (isset($resultObject[$field])) {
+                    $responseArray[$field] = $resultObject[$field];
+                }
+            }
+            return isset($responseArray) ? $responseArray : [];
         }
 
         throw new \InvalidArgumentException(
